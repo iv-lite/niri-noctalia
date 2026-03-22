@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+total_memory=$(awk '/MemTotal/ { printf "%.3f \n", $2/1024/1024 }' /proc/meminfo)
+swap_size=$((2 * ($(printf "%.*f\n" 0 ${total_memory} ) + 1)))
+swap_size_mb=$((${swap_size} * 1024))
+
+# Create and activate a Swap Device
+fs_uuid=$(findmnt / -o UUID -n)
+sudo mount -m -U $fs_uuid /mnt/system-${fs_uuid}
+sudo btrfs subvolume create /mnt/system-${fs_uuid}/@swap
+sudo umount /mnt/system-${fs_uuid}
+sudo mount -m -U ${fs_uuid} -o subvol=@swap,nodatacow /swap
+
+# swapfile creation
+sudo btrfs filesystem mkswapfile --size ${swap_size}G --uuid clear /swap/swapfile
+sudo umount /swap
+
+# Add 2 entries and enable the swapfile in /etc/fstab
+if ! grep -q /swap /etc/fstab; then
+    echo "#swapfile" | sudo tee -a /etc/fstab
+    echo -e "UUID=${fs_uuid}\t/swap\tbtrfs\tsubvol=@swap,nodatacow,noatime,nospace_cache\t0\t0" | sudo tee -a /etc/fstab
+    echo -e "/swap/swapfile\tnone\tswap\tdefaults\t0\t0"$'\n' | sudo tee -a /etc/fstab
+fi
+
+if ! grep -q "block resume encrypt" /etc/mkinitcpio.conf; then
+    sudo sed -i "s/block encrypt/block encrypt resume/" /etc/mkinitcpio.conf
+fi
+
+sudo mkinitcpio -P

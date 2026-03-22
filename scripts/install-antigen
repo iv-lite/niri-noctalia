@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+basedir="$(pwd)"
+
+. ${basedir}/package-manager
+
+yes | ${package_manager} -Sy --answerclean=All --answerdiff=None --answeredit=None --noconfirm \
+    zsh
+cp ${basedir}/../home/.zshrc ${HOME}/.zshrc
+chsh -s $(which zsh)
+
+curl -L git.io/antigen > ${HOME}/antigen.zsh

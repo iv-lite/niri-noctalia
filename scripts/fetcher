@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+basedir="$(pwd)"
+
+. ${basedir}/package-manager
+
+read -r -p "Do you want to enable the firewall ? [y/N] " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    yes | ${package_manager} -Sy --answerclean=All --answerdiff=None --answeredit=None --noconfirm \
+        firewalld
+    
+    sudo systemctl enable --now firewalld.service
+fi
+
+echo "Installing default packages"
+. ${basedir}/packages-list
+yes | ${package_manager} -Sy --answerclean=All --answerdiff=None --answeredit=None --noconfirm \
+    $packages
+
+read -r -p "Do you want to enable amdgpu hardware audio/video decoding ? [y/N] " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    . ${basedir}/amd-va-packages-list
+    yes | ${package_manager} -Sy --answerclean=All --answerdiff=None --answeredit=None --noconfirm \
+        $amd_va_packages
+    echo "Hardware Audio/Video acceleration enabled !"
+fi

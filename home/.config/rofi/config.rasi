@@ -1,0 +1,24 @@
+configuration {
+  modes: [ combi, drun, calc, run ];
+  combi-modes: [ drun, calc, run ];
+  combi-display-format: "{mode} {text}";
+  fixed-num-lines: false;
+  lines: 2;
+  history: false;
+  show-icons: true;
+  icon-theme: "Papirus-Dark";
+
+  timeout {
+      action: "kb-cancel";
+      delay:  0;
+  }
+  filebrowser {
+      directories-first: true;
+      sorting-method:    "name";
+  }
+  calc {
+      hint-result: "Res: ";
+      hint-welcome: "Calc";
+  }
+}
+@theme "nord"

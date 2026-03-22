@@ -1,0 +1,25 @@
+window-rule {
+    geometry-corner-radius 4
+    clip-to-geometry true
+    tiled-state true
+    open-focused true
+    variable-refresh-rate true
+}
+
+window-rule {
+    match is-active=false
+    opacity 0.8
+}
+
+window-rule {
+    match app-id="firefox"
+    match app-id="code"
+
+    open-maximized true
+}
+
+window-rule {
+    match app-id="com.mitchellh.ghostty"
+
+    default-column-width { proportion 0.75; }
+}

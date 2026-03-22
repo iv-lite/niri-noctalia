@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+cd "$(dirname ${BASH_SOURCE[0]})/../"
+
+sudo sed -i -e 's/#fr_CH.UTF-8 UTF-8/fr_CH.UTF-8 UTF-8/g' /etc/locale.gen
+sudo locale-gen
+sudo localectl set-keymap --no-convert fr_CH
+
+cp -a ./home/. ${HOME}/
+
+xdg-mime default org.gnome.Nautilus.desktop inode/directory
+xdg-mime default org.gnome.Nautilus.desktop x-directory/normal
+xdg-mime default org.gnome.Nautilus.desktop x-directory/gnome-default-handler
+
+sudo cp -r ./etc/greetd /etc/
+
+sudo cp -r ./etc/pam.d/greetd /etc/pam.d/greetd
+
+sudo cp ./etc/logid.cfg /etc/logid.cfg
+
+sudo cp -r ./etc/clamav /etc/
+sudo cp ./etc/sudoers.d/clamav /etc/sudoers.d/clamav
+sudo -u clamav /usr/bin/fangfrisch --conf /etc/fangfrisch/fangfrisch.conf initdb
+
+sudo chown -R greeter:greeter /etc/greetd
+echo "greetd deployed"
+
+sudo cp -r ./etc/modules-load.d/ddcci_backlight.conf /etc/modules-load.d/
+echo "ddcci_backlight kernel module deployed"
+
+sudo usermod -aG video $USER
+
+sudo cp -r ./system/* /usr/lib/systemd/system/
+
+sudo mkdir /run/clamav
+sudo touch /run/clamav/clamd.ctl
+sudo chown clamav:clamav /run/clamav/clamd.ctl
+sudo freshclam
+sudo systemctl enable --now clamav-freshclam.service
+sudo systemctl enable clamav-clamonacc.service
+sudo systemctl enable clamav-daemon.service
+sudo systemctl enable fangfrisch.timer
+
+systemctl --user enable gcr-ssh-agent.socket
+sudo systemctl enable greetd.service --force
+sudo systemctl enable dbus-broker.service
+sudo systemctl enable bluetooth.service
+systemctl --user enable wayland-pipewire-idle-inhibit.service
+sudo systemctl enable logid.service

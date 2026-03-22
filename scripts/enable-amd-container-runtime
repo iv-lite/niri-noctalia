@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+basedir="$(pwd)"
+
+. ${basedir}/package-manager
+
+yes | ${package_manager} -Sy --answerclean=All --answerdiff=None --answeredit=None --noconfirm \
+    docker \
+    lazydocker
+
+sudo usermod -aG docker $USER
+newgrp $USER
+
+sudo systemctl enable --now docker
+docker context use default
+
+yes | ${package_manager} -Sy --answerclean=All --answerdiff=None --answeredit=None --noconfirm \
+    amd-container-toolkit 
+
+sudo usermod -a -G render,video $USER
+newgrp $USER
+
+sudo amd-ctk runtime configure --config-path $HOME/.docker/daemon.json
+sudo mkdir /etc/docker
+sudo cp $HOME/.docker/daemon.json /etc/docker/daemon.json
+sudo systemctl restart docker

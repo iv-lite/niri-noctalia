@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+basedir="$(pwd)"
+
+configurations=($(ls ../configurations))
+
+purge() {
+    if [ -d "${HOME}/.config/$1" ]; then
+        rm -rf "${HOME}/.config/$1"
+        echo "${HOME}/.config/$1 removed"
+    fi
+}
+
+for configuration in ${configurations[*]}; do
+    purge $configuration
+done
+
+if [ -d /etc/greetd ]; then
+    sudo rm -r /etc/greetd
+    echo "/etc/greetd removed"
+fi
+
+if [ -f /etc/modules-load.d/ddcci_backlight.conf ]; then
+    sudo rm /etc/modules-load.d/ddcci_backlight.conf
+    echo "ddcci_backlight kernel module removed"
+fi
+
+. ${basedir}/package-manager
+. ${basedir}/packages-list
+${package_manager} -Rns --noconfirm $packages

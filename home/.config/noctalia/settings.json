@@ -71,7 +71,7 @@
         "rightClickFollowMouse": true,
         "screenOverrides": [
         ],
-        "showCapsule": true,
+        "showCapsule": false,
         "showOnWorkspaceSwitch": true,
         "showOutline": false,
         "useSeparateOpacity": true,
@@ -202,7 +202,7 @@
                     "textColor": "none"
                 },
                 {
-                    "applyToAllMonitors": false,
+                    "applyToAllMonitors": true,
                     "displayMode": "onhover",
                     "iconColor": "none",
                     "id": "Brightness",
@@ -225,7 +225,7 @@
         ],
         "brightnessStep": 5,
         "enableDdcSupport": true,
-        "enforceMinimum": true
+        "enforceMinimum": false
     },
     "calendar": {
         "cards": [
@@ -245,7 +245,7 @@
     },
     "colorSchemes": {
         "darkMode": true,
-        "generationMethod": "fruit-salad",
+        "generationMethod": "muted",
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
         "monitorForColors": "DP-1",
@@ -360,7 +360,7 @@
         "animationDisabled": false,
         "animationSpeed": 1,
         "autoStartAuth": false,
-        "avatarImage": "/home/iv/.face",
+        "avatarImage": "",
         "boxRadiusRatio": 1,
         "clockFormat": "dd.MM.yyyy HH:mm ",
         "clockStyle": "custom",
@@ -628,7 +628,15 @@
         "activeTemplates": [
             {
                 "enabled": true,
+                "id": "code"
+            },
+            {
+                "enabled": true,
                 "id": "ghostty"
+            },
+            {
+                "enabled": true,
+                "id": "cava"
             },
             {
                 "enabled": true,
@@ -640,11 +648,7 @@
             },
             {
                 "enabled": true,
-                "id": "code"
-            },
-            {
-                "enabled": true,
-                "id": "cava"
+                "id": "scroll"
             }
         ],
         "enableUserTheming": false

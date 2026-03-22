@@ -20,6 +20,7 @@ export packages="\
     hyprpaper \
     hyprpicker \
     noctalia-shell \
+    ddcutil \
     i2c-tools \
     waybar \
     grim \

@@ -31,7 +31,6 @@ export packages="\
     ttf-font-awesome-5 \
     ttf-roboto-mono \
     ttf-roboto \
-    mako \
     gbm \
     hyprland-protocols \
     wayland-protocols \

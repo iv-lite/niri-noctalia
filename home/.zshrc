@@ -1,3 +1,5 @@
+export PATH="$PATH:$HOME/.local/bin/"
+
 source ~/antigen.zsh
 
 antigen use oh-my-zsh

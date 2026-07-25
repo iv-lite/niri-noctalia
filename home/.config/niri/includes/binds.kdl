@@ -64,7 +64,7 @@ binds {
     Mod+Comma { spawn-sh "noctalia msg settings-toggle"; }
     Alt+Tab { spawn-sh "noctalia msg window-switcher"; }
 
-    Ctrl+Alt+Print { screenshot; }
+    Ctrl+Alt+S { spawn-sh "noctalia msg screenshot-region"; }
 }
 
 spawn-at-startup "dbus-update-activation-environment" "--all"
